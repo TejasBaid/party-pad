@@ -82,7 +82,9 @@ async function connect() {
     if (location.protocol === 'https:') joinBase = location.origin;
     else if (info.httpsPort) joinBase = `https://${host}:${info.httpsPort}`;
     else joinBase = `${location.protocol}//${host}${location.port ? ':' + location.port : ''}`;
-    if (!info.httpsPort || location.protocol === 'https:') $('certHint').textContent = 'Same Wi-Fi as this screen. Your phone becomes the controller.';
+    const lan = isLocal || /^(10|192\.168|172\.(1[6-9]|2\d|3[01]))\./.test(location.hostname);
+    if (!lan && location.protocol === 'https:') $('certHint').textContent = 'Scan with your phone camera — works on Wi-Fi or mobile data. Your phone becomes the controller.';
+    else if (!info.httpsPort || location.protocol === 'https:') $('certHint').textContent = 'Same Wi-Fi as this screen. Your phone becomes the controller.';
   } catch {}
   const proto = location.protocol === 'https:' ? 'wss' : 'ws';
   ws = new WebSocket(`${proto}://${location.host}/ws`);
