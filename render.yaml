@@ -1,0 +1,12 @@
+# Render blueprint — "New > Blueprint" in the Render dashboard picks this up.
+services:
+  - type: web
+    name: party-pad
+    runtime: node
+    plan: free
+    buildCommand: npm ci
+    startCommand: npm start
+    healthCheckPath: /api/info
+    envVars:
+      - key: NODE_VERSION
+        value: "22"

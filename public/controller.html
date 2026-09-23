@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="theme-color" content="#1b1340" />
+  <title>Party Pad Controller</title>
+  <link rel="stylesheet" href="/css/controller.css" />
+</head>
+<body>
+  <!-- JOIN -->
+  <section id="join" class="screen">
+    <div class="join-hero">
+      <div class="logo">PARTY<span>PAD</span></div>
+      <p class="tag">Your phone is the controller — wheel, sword &amp; remote</p>
+    </div>
+    <form id="joinForm" class="card" autocomplete="off">
+      <label>Your name<input id="nameIn" maxlength="12" placeholder="Speedy" required /></label>
+      <label id="codeLabel">Room code<input id="codeIn" maxlength="4" placeholder="ABCD" required autocapitalize="characters" /></label>
+      <div id="roomTag" class="room-tag hidden">Joining room <b></b></div>
+      <button class="big-btn" type="submit">JOIN THE PARTY</button>
+      <p class="err" id="joinErr"></p>
+    </form>
+    <p class="fine">Watch the big screen — this is your controller.</p>
+  </section>
+
+  <!-- LOBBY -->
+  <section id="lobby" class="screen hidden">
+    <header class="topbar">
+      <div class="me"><i></i><b id="meName"></b><span id="meSlot"></span></div>
+      <div class="room-pill">Room <b id="roomPill"></b></div>
+    </header>
+
+    <div class="game-banner" id="gameBanner">
+      <button class="gb-arrow hidden" data-set="game" data-d="-1">‹</button>
+      <div class="gb-body"><span class="gb-icon" id="gbIcon"></span><div><b id="gbName"></b><small id="gbTag"></small></div></div>
+      <button class="gb-arrow hidden" data-set="game" data-d="1">›</button>
+    </div>
+
+    <div id="kartSection">
+    <div class="showcase" id="showcase">
+      <div class="glow"></div>
+      <button class="arrow left" id="kPrev" aria-label="Previous kart">‹</button>
+      <img id="kImg" alt="" draggable="false" />
+      <button class="arrow right" id="kNext" aria-label="Next kart">›</button>
+      <div class="dots" id="kDots"></div>
+    </div>
+    <div class="kart-info">
+      <h2 id="kName"></h2>
+      <p id="kBlurb" class="blurb"></p>
+      <div id="kStats" class="stats"></div>
+    </div>
+
+    <div class="card controls">
+      <div class="row-head"><h3>Steering</h3>
+        <div class="seg" id="steerSeg">
+          <button data-mode="tilt"><svg viewBox="0 0 24 24"><rect x="7" y="2" width="10" height="20" rx="2.5" transform="rotate(-18 12 12)"/></svg>Tilt</button>
+          <button data-mode="touch"><svg viewBox="0 0 24 24"><path d="M9 11V5a2 2 0 1 1 4 0v5l4.5.8a2 2 0 0 1 1.6 2.3L18 20H9.5L5 14.5a1.6 1.6 0 0 1 2.4-2z"/></svg>Touch</button>
+        </div>
+      </div>
+      <div id="tiltBox">
+        <div class="tilt-meter"><div class="mini-wheel" id="tiltWheel"><div class="spoke"></div></div></div>
+        <p class="note" id="tiltNote">Hold your phone sideways like a steering wheel and tilt.</p>
+        <div class="row">
+          <button class="small-btn" id="recenter">⟳ Recenter</button>
+          <div class="seg mini" id="sensSeg"><button data-s="45">Gentle</button><button data-s="30">Normal</button><button data-s="20">Twitchy</button></div>
+        </div>
+        <label class="toggle"><input type="checkbox" id="invertTilt" /><span></span> Invert tilt</label>
+      </div>
+      <label class="toggle"><input type="checkbox" id="autoGas" checked /><span></span> Auto-accelerate <small>hold BRAKE to slow</small></label>
+    </div>
+    </div>
+
+    <div class="card remote-setup hidden" id="remoteSection">
+      <div class="row-head"><h3>Your remote</h3>
+        <div class="seg" id="aimSeg">
+          <button data-aim="air"><svg viewBox="0 0 24 24"><path d="M12 2 4 20l8-4 8 4z"/></svg>Point</button>
+          <button data-aim="pad"><svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="3"/></svg>Touchpad</button>
+        </div>
+      </div>
+      <p class="note" id="aimNote">Hold your phone like a TV remote and point it at the big screen. Try it — the dot follows you:</p>
+      <div class="test-screen" id="testScreen"><i id="testDot"></i></div>
+      <div class="row">
+        <button class="small-btn" id="aimCenter">◎ Center</button>
+        <div class="seg mini" id="aimSpeed"><button data-v="0.7">Slow</button><button data-v="1">Normal</button><button data-v="1.4">Fast</button></div>
+      </div>
+      <div class="row flips"><label class="toggle"><input type="checkbox" id="flipX" /><span></span> Flip left/right</label><label class="toggle"><input type="checkbox" id="flipY" /><span></span> Flip up/down</label></div>
+    </div>
+
+    <details class="card host-card hidden" id="hostCard" open>
+      <summary><h3><span id="setupName">Setup</span> <span class="badge">HOST</span></h3></summary>
+      <div id="hostSettings"></div>
+    </details>
+    <div class="players" id="playerChips"></div>
+    <div class="spacer"></div>
+    <footer class="dock">
+      <button class="big-btn hidden" id="startBtn">START RACE</button>
+      <div class="waiting" id="waitCard">Waiting for <b id="leaderName"></b> to start…</div>
+    </footer>
+  </section>
+
+  <!-- RACE PAD -->
+  <section id="race" class="hidden">
+    <div class="pad">
+      <!-- left thumb -->
+      <div class="zone left-zone">
+        <div class="steer-pad" id="steerZone">
+          <div class="chev l">‹‹</div><div class="knob" id="knob"></div><div class="chev r">››</div>
+          <div class="steer-hint">Slide to steer</div>
+        </div>
+        <div class="tilt-left">
+          <button class="btn item" id="itemBtnL"><span class="ic"></span><small>ITEM</small></button>
+          <button class="btn brake" id="brakeBtnL"><svg viewBox="0 0 24 24"><rect x="6" y="5" width="4" height="14" rx="1.5"/><rect x="14" y="5" width="4" height="14" rx="1.5"/></svg><small>BRAKE</small></button>
+        </div>
+      </div>
+      <!-- centre readout -->
+      <div class="zone centre">
+        <div class="pos"><b id="rPos">–</b><span id="rOf"></span></div>
+        <div class="chips"><span id="rLap">LAP 1/3</span><span id="rCoins"><i class="coin"></i>0</span></div>
+        <div class="wheel" id="wheel"><div class="spoke"></div><div class="hub"></div></div>
+        <div class="drift-meter"><i id="driftBar"></i></div>
+      </div>
+      <!-- right thumb -->
+      <div class="zone right-zone">
+        <div class="top-row">
+          <button class="btn item" id="itemBtn"><span class="ic"></span><small>ITEM</small></button>
+          <button class="btn brake" id="brakeBtn"><svg viewBox="0 0 24 24"><rect x="6" y="5" width="4" height="14" rx="1.5"/><rect x="14" y="5" width="4" height="14" rx="1.5"/></svg><small>BRAKE</small></button>
+          <button class="btn gas hidden" id="gasBtn"><svg viewBox="0 0 24 24"><path d="M12 3 4 13h5v8h6v-8h5z"/></svg><small>GAS</small></button>
+        </div>
+        <button class="btn drift" id="driftBtn"><svg viewBox="0 0 24 24"><path d="M4 16c3-7 9-10 16-9m0 0-4-3m4 3-3 4" fill="none" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>DRIFT<small>hold while turning</small></button>
+      </div>
+    </div>
+    <div class="overlay hidden" id="raceOverlay"></div>
+  </section>
+
+  <!-- REMOTE (Fruit Frenzy / Pizza Party) -->
+  <section id="remote" class="hidden">
+    <div class="rm-status" id="rmStatus"></div>
+    <div class="rm-title" id="rmTitle">SWING TO SLICE</div>
+    <div class="rm-pad" id="rmPad">
+      <div class="rm-air"><div class="rm-phone"><i></i></div><p id="rmHint">Point at the TV</p></div>
+      <div class="rm-touch"><div class="rm-touch-dot" id="rmTouchDot"></div><p>Slide your finger to move · swipe fast to slice</p></div>
+    </div>
+    <div class="rm-buttons">
+      <button class="small-btn rm-center" id="rmCenter">◎</button>
+      <button class="rm-a" id="rmA"><b id="rmALabel">GRAB</b><small>hold</small></button>
+    </div>
+    <div class="overlay hidden" id="rmOverlay"></div>
+  </section>
+
+  <!-- RESULTS -->
+  <section id="results" class="screen hidden">
+    <div class="medal" id="resPlace"></div>
+    <div class="card"><ol id="resList"></ol></div>
+    <div class="host-actions hidden" id="resHost">
+      <button class="big-btn" data-cmd="again">RACE AGAIN</button>
+      <div class="row"><button class="small-btn" data-cmd="next">Next track ›</button><button class="small-btn" data-cmd="menu">Back to lobby</button></div>
+    </div>
+    <p class="fine" id="resWait">Waiting for the host…</p>
+  </section>
+
+  <div id="rotate" class="hidden"><div class="phone"></div><p>Turn your phone sideways</p></div>
+  <div id="banner" class="hidden"></div>
+  <script type="module" src="/js/controller.js"></script>
+</body>
+</html>

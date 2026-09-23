@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Party Pad</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏁</text></svg>" />
+  <link rel="stylesheet" href="/css/host.css" />
+  <script type="importmap">
+    { "imports": { "three": "/vendor/three/build/three.module.js", "three/addons/": "/vendor/three/examples/jsm/" } }
+  </script>
+</head>
+<body>
+  <canvas id="gl"></canvas>
+  <div id="hud"></div>
+
+  <div id="loading" class="screen">
+    <div class="logo big">PARTY<span>PAD</span></div>
+    <div class="bar"><i id="loadbar"></i></div>
+    <p id="loadtext">Warming up the engines, the ovens and the swords…</p>
+  </div>
+
+  <div id="lobby" class="screen hidden">
+    <div class="lobby-top">
+      <div class="logo">PARTY<span>PAD</span></div>
+      <div class="games" id="games"></div>
+      <div class="top-actions">
+        <button class="chip" id="musicBtn" title="Music (M)">♫ Music</button>
+        <button class="chip" id="fsBtn" title="Fullscreen (F)">⛶</button>
+      </div>
+    </div>
+    <div class="lobby-main">
+      <section class="panel join">
+        <h2>Grab your phone!</h2>
+        <div class="qr-wrap"><img id="qr" alt="QR code to join" /></div>
+        <div class="room">Room <b id="roomCode">····</b></div>
+        <div class="url" id="joinUrl">connecting…</div>
+        <p class="hint" id="certHint">Same Wi-Fi as this screen. First time? Your phone may warn about the certificate — tap <b>Show details → visit website</b>. That unlocks motion controls.</p>
+      </section>
+
+      <section class="panel players">
+        <h2>Players <span class="count" id="playerCount">0/4</span></h2>
+        <div class="slots" id="slots"></div>
+        <p class="hint keys" id="keyHint"></p>
+      </section>
+
+      <section class="panel settings">
+        <h2 id="setupTitle">Setup</h2>
+        <div id="settingsList"></div>
+        <button class="go-btn" id="startBtn">START <kbd>Enter</kbd></button>
+        <button class="solo-btn" id="soloBtn">Play solo</button>
+        <p class="hint center"><kbd>Q</kbd> <kbd>E</kbd> switch game</p>
+      </section>
+    </div>
+    <p class="credits">Karts: Racing car &amp; Kart by scaranto (CC0) · Go Kart by Zsky · Buggy by Nick Slough · Go kart by Poly by Google (CC-BY 3.0, via Poly Pizza) · Nature: Quaternius (CC0) · Food, furniture, characters &amp; props: Kenney (CC0)</p>
+  </div>
+
+  <div id="results" class="screen hidden">
+    <div class="results-card">
+      <h1 id="resTitle">RESULTS</h1>
+      <div id="resSummary"></div>
+      <ol id="resultList"></ol>
+      <div class="res-actions">
+        <button class="go-btn" id="againBtn">PLAY AGAIN <kbd>Enter</kbd></button>
+        <button class="chip" id="nextBtn">Next track <kbd>N</kbd></button>
+        <button class="chip" id="menuBtn">Lobby <kbd>Esc</kbd></button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toasts"></div>
+  <script type="module" src="/js/main.js"></script>
+</body>
+</html>

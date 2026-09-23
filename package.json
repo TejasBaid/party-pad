@@ -1,0 +1,19 @@
+{
+  "name": "party-pad",
+  "version": "1.0.0",
+  "description": "Couch party games on the big screen — phones are the controllers (Kart Party, Fruit Frenzy, Pizza Party)",
+  "main": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "qrcode": "^1.5.4",
+    "selfsigned": "^5.5.0",
+    "three": "^0.186.0",
+    "ws": "^8.21.3"
+  }
+}
